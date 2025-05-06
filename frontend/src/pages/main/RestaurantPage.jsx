@@ -157,13 +157,13 @@ function RestaurantPage() {
       )}
 
       {error && (
-        <div className="bg-red-100 border-l-4 border-red-600 p-4 rounded mb-8 flex items-center gap-2">
+        <div className="fixed top-4 right-4 bg-red-100 border-l-4 border-red-600 p-4 rounded shadow-lg flex items-center gap-2 animate-slide-in max-w-sm z-50">
           <AlertCircle size={20} className="text-red-600" />
           <p className="text-red-800 text-sm">{error}</p>
         </div>
       )}
       {success && (
-        <div className="bg-green-100 border-l-4 border-green-600 p-4 rounded mb-8 flex items-center gap-2">
+        <div className="fixed top-4 right-4 bg-green-100 border-l-4 border-green-600 p-4 rounded shadow-lg flex items-center gap-2 animate-slide-in max-w-sm z-50">
           <CheckCircle size={20} className="text-green-600" />
           <p className="text-green-800 text-sm">{success}</p>
         </div>
@@ -172,7 +172,10 @@ function RestaurantPage() {
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="bg-white border p-4 rounded">
+            <div
+              key={i}
+              className="bg-white border border-gray-100 p-4 rounded"
+            >
               <div className="w-full h-56 bg-gray-200 rounded mb-4 animate-pulse" />
               <div className="h-6 bg-gray-200 rounded w-3/4 animate-pulse" />
             </div>
@@ -194,7 +197,7 @@ function RestaurantPage() {
           {menuItems.map((item) => (
             <div
               key={item._id}
-              className="bg-white border p-4 rounded hover:bg-gray-50"
+              className="bg-white border-2  border-gray-100 p-4 rounded hover:bg-gray-50"
             >
               <div className="relative h-56 mb-4">
                 <img

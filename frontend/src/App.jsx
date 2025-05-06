@@ -1,8 +1,8 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "./contexts/authContext";
+import { AuthProvider } from "./contexts/authContext.jsx";
 import RoleProtectedRoute from "./routes/RoleProtectedRoute.jsx";
-import RedirectByRole from "./routes/RedirectByRole";
+import RedirectByRole from "./routes/RedirectByRole.jsx";
 
 import AuthLayout from "./components/layout/AuthLayout.jsx";
 import Login from "./pages/Auth/Login.jsx";
@@ -15,8 +15,8 @@ import AddRestaurant from "./pages/main/AddRestaurant.jsx";
 import Restaurants from "./pages/main/Restaurants.jsx";
 import RestaurantPage from "./pages/main/RestaurantPage.jsx";
 import CartPage from "./pages/main/CartPage.jsx";
-import CheckoutPage from "./pages/main/CheckoutPage";
-import PaymentPage from "./pages/main/PaymentPage";
+import CheckoutPage from "./pages/main/CheckoutPage.jsx";
+import PaymentPage from "./pages/main/PaymentPage.jsx";
 import TrackOrder from "./pages/main/TrackOrder.jsx";
 
 import SystemAdminDashboardLayout from "./components/layout/SystemAdminDashboardLayout.js";
