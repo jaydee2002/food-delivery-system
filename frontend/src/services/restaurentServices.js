@@ -1,7 +1,6 @@
 import axios from "axios";
 
 const API_URL = `${import.meta.env.VITE_API_RESTAURANT_BASE_URL}/restaurants`;
-console.log(API_URL);
 
 // Helper function to get auth token from localStorage
 const getAuthToken = () => {
@@ -192,4 +191,4 @@ export const getRestaurantByOwner = async () => {
     );
     throw error.response?.data?.error || "Failed to fetch restaurant by owner";
   }
-}
+};

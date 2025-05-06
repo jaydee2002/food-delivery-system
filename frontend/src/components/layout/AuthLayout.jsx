@@ -6,15 +6,6 @@ function AuthLayout() {
 
   return (
     <div className="flex h-screen font-sourceSans relative">
-      {/* <button
-        onClick={() => navigate("/")}
-        className="absolute top-4 left-4 p-2 rounded-full  text-white  hover:bg-gray-300 focus:outline-none"
-        aria-label="Go back"
-      >
-        <FiArrowLeft size={20} />
-        Go back
-      </button> */}
-
       <button
         onClick={() => navigate("/")}
         className="absolute top-6 left-6 flex items-center text-white gap-2 px-4 py-2 rounded-full  transition-all duration-200"

@@ -14,11 +14,7 @@ const server = http.createServer(app);
 export const io = new Server(server);
 app.use(express.json());
 
-app.use(
-  cors({
-    origin: 'http://localhost:5173',
-  })
-);
+app.use(cors());
 
 mongoose
   .connect(process.env.MONGO_URI)
