@@ -125,7 +125,7 @@ function RestaurantPage() {
   );
 
   return (
-    <div className="max-w-7xl mx-auto py-8 px-4">
+    <div className="max-w-6xl mx-auto py-8">
       {isLoading ? (
         <div className="animate-pulse">
           <div className="w-full h-64 bg-gray-200 rounded mb-4" />
@@ -186,7 +186,7 @@ function RestaurantPage() {
           <p className="text-gray-600 mb-4">No menu items available.</p>
           <Link
             to="/restaurants"
-            className="inline-flex items-center px-4 py-2 bg-black F text-white rounded hover:bg-gray-700"
+            className="inline-flex items-center px-4 py-2 bg-black text-white rounded hover:bg-gray-700"
           >
             <ArrowLeft size={16} className="mr-2" />
             Back to Restaurants

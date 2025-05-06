@@ -153,17 +153,17 @@ function CartPage() {
   const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <div className="max-w-7xl mx-auto bg-gray px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-6xl mx-auto bg-gray py-8">
       <h2 className="text-3xl font-bold text-gray-900 mb-8">Your Cart</h2>
 
       {error && (
-        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-lg mb-8 shadow-sm">
+        <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-lg mb-8 ">
           {error}
         </div>
       )}
 
       {isLoading ? (
-        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 animate-pulse">
+        <div className="bg-white p-8 rounded-xl  border border-gray-100 animate-pulse">
           <div className="space-y-6">
             <div className="h-7 bg-gray-100 rounded w-1/3"></div>
             <div className="flex items-center space-x-6">
@@ -177,10 +177,10 @@ function CartPage() {
           </div>
         </div>
       ) : cart.length === 0 ? (
-        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center">
+        <div className="bg-white p-8 rounded-xl  border border-gray-100 text-center">
           <p className="text-gray-500 text-lg">Your cart is empty.</p>
           <button
-            onClick={() => navigate("/menu")}
+            onClick={() => navigate("/restaurants")}
             className="mt-4 inline-block text-indigo-600 hover:text-indigo-700 font-medium text-sm"
           >
             Browse Menu
@@ -190,7 +190,7 @@ function CartPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div className="bg-white rounded-xl  border border-gray-100">
               {cart.map((item) => (
                 <div
                   key={item.menuItem}
@@ -205,7 +205,7 @@ function CartPage() {
                         : "https://via.placeholder.com/100x100?text=No+Image"
                     }
                     alt={item.name}
-                    className="w-20 h-20 object-cover rounded-lg mr-6 shadow-sm"
+                    className="w-20 h-20 object-cover rounded-lg mr-6 "
                     loading="lazy"
                   />
                   <div className="flex-1">
@@ -219,7 +219,7 @@ function CartPage() {
                       <button
                         onClick={() => handleDecrement(item)}
                         disabled={isCartUpdating}
-                        className="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-700 rounded border hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 transition-colors duration-150"
+                        className="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-700 rounded border border-gray-200 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 transition-colors duration-150"
                         aria-label={`Decrease quantity of ${item.name}`}
                       >
                         <span className="text-lg">-</span>
@@ -230,7 +230,7 @@ function CartPage() {
                       <button
                         onClick={() => handleIncrement(item)}
                         disabled={isCartUpdating}
-                        className="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-700 rounded border hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 transition-colors duration-150"
+                        className="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-700 rounded border border-gray-200 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 transition-colors duration-150"
                         aria-label={`Increase quantity of ${item.name}`}
                       >
                         <span className="text-lg">+</span>
@@ -268,7 +268,7 @@ function CartPage() {
 
           {/* Checkout Form */}
           <div>
-            <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+            <div className="bg-white p-8 rounded-xl border border-gray-100">
               <h3 className="text-xl font-semibold text-gray-900 mb-6">
                 Delivery Details
               </h3>
@@ -289,7 +289,7 @@ function CartPage() {
                       addressErrors.street
                         ? "border-red-500 focus:ring-red-500"
                         : "border-gray-200 focus:ring-indigo-500"
-                    } bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:border-transparent transition-all duration-200 shadow-sm`}
+                    } bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:border-transparent transition-all duration-200 `}
                     placeholder="123 Main St"
                     aria-invalid={!!addressErrors.street}
                     aria-describedby={
@@ -318,7 +318,7 @@ function CartPage() {
                       addressErrors.city
                         ? "border-red-500 focus:ring-red-500"
                         : "border-gray-200 focus:ring-indigo-500"
-                    } bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:border-transparent transition-all duration-200 shadow-sm`}
+                    } bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:border-transparent transition-all duration-200 `}
                     placeholder="New York"
                     aria-invalid={!!addressErrors.city}
                     aria-describedby={
@@ -347,7 +347,7 @@ function CartPage() {
                       addressErrors.state
                         ? "border-red-500 focus:ring-red-500"
                         : "border-gray-200 focus:ring-indigo-500"
-                    } bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:border-transparent transition-all duration-200 shadow-sm`}
+                    } bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:border-transparent transition-all duration-200 `}
                     placeholder="NY"
                     aria-invalid={!!addressErrors.state}
                     aria-describedby={
@@ -376,7 +376,7 @@ function CartPage() {
                       addressErrors.zipcode
                         ? "border-red-500 focus:ring-red-500"
                         : "border-gray-200 focus:ring-indigo-500"
-                    } bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:border-transparent transition-all duration-200 shadow-sm`}
+                    } bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:border-transparent transition-all duration-200 `}
                     placeholder="10001"
                     aria-invalid={!!addressErrors.zipcode}
                     aria-describedby={
@@ -405,7 +405,7 @@ function CartPage() {
                       addressErrors.countryCode
                         ? "border-red-500 focus:ring-red-500"
                         : "border-gray-200 focus:ring-indigo-500"
-                    } bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:border-transparent transition-all duration-200 shadow-sm`}
+                    } bg-white text-gray-900 placeholder-gray-400 focus:ring-2 focus:border-transparent transition-all duration-200 `}
                     placeholder="US"
                     aria-invalid={!!addressErrors.countryCode}
                     aria-describedby={
@@ -457,7 +457,7 @@ function CartPage() {
               </div>
               <button
                 onClick={handleCheckout}
-                className="mt-8 w-full px-6 py-4 bg-black text-white rounded-lg font-medium hover:bg-black focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:bg-gray-900 disabled:cursor-not-allowed transition-all duration-200 shadow-sm"
+                className="mt-8 w-full px-6 py-4 bg-black text-white rounded-lg font-medium hover:bg-black focus:ring-2 focus:ring-black focus:ring-offset-2 disabled:bg-gray-900 disabled:cursor-not-allowed transition-all duration-200 "
                 disabled={isLoading || isCartUpdating}
               >
                 {paymentMethod === "cod" ? "Place Order" : "Proceed to Payment"}

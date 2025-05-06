@@ -66,13 +66,13 @@ function CheckoutPage() {
           <div className="flex justify-between items-center">
             <button
               onClick={() => navigate("/")}
-              className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-4 px-6 py-3 bg-black text-white rounded-md hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Back to Home
             </button>
             <button
               onClick={() => navigate(`/track-order/${order._id}`)}
-              className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="mt-4 px-6 py-3 bg-black text-white rounded-md hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               Track Order
             </button>
@@ -132,7 +132,7 @@ function CheckoutPage() {
             <button
               onClick={handleConfirmOrder}
               disabled={isLoading}
-              className="mt-6 w-full px-6 py-3 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400"
+              className="mt-6 w-full px-6 py-3 bg-black text-white rounded-md hover:bg-black focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-400"
             >
               {isLoading ? "Placing Order..." : "Confirm Order"}
             </button>

@@ -27,7 +27,7 @@ function Restaurants() {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto py-8 px-4 sm:px-6 lg:px-8 ">
+    <div className="max-w-6xl mx-auto py-8">
       <h2 className="text-2xl font-semibold text-gray-900 mb-8 animate-fade-in">
         Restaurants
       </h2>
