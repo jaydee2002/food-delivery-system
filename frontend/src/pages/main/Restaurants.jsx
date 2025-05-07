@@ -28,9 +28,6 @@ function Restaurants() {
 
   return (
     <div className="max-w-6xl mx-auto py-8">
-      <h2 className="text-2xl font-semibold text-gray-900 mb-8 animate-fade-in">
-        Restaurants
-      </h2>
       {error && (
         <div
           className="bg-red-100 border-l-4 border-red-600 p-4 rounded-lg shadow-md mb-8 flex items-center gap-3 animate-toast-in"
@@ -49,7 +46,7 @@ function Restaurants() {
           role="status"
           aria-hidden="true"
         >
-          {[...Array(6)].map((_, index) => (
+          {[...Array(8)].map((_, index) => (
             <div
               key={index}
               className="bg-white border border-gray-100 p-4 rounded-lg shadow-sm"
