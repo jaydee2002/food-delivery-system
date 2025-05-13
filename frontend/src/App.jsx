@@ -36,7 +36,8 @@ import MyDeliveries from "./pages/Dashboard/my-delivery.jsx";
 import PageNotFound from "./pages/errors/PageNotFound.jsx";
 import Unauthorized from "./pages/errors/Unauthorized.jsx";
 
-import AddressPicker from "./components/AddressPicker.jsx";
+import AddressPicker from "./components/temp/AddressPicker.jsx";
+import Table from "./components/temp/Table.jsx";
 
 function App() {
   return (
@@ -124,6 +125,7 @@ function App() {
           <Route path="/unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<PageNotFound />} />
           <Route path="/address-picker" element={<AddressPicker />} />
+          <Route path="/table" element={<Table darkMode={true} />} />
         </Routes>
       </Router>
     </AuthProvider>
