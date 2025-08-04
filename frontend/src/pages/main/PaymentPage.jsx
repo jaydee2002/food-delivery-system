@@ -120,7 +120,7 @@ function PaymentForm() {
   );
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-6xl mx-auto pt-6">
       <h2 className="text-3xl font-bold text-gray-900 mb-8">
         Complete Your Payment
       </h2>
@@ -132,7 +132,7 @@ function PaymentForm() {
       )}
 
       {order ? (
-        <div className="bg-white p-8 rounded-lg ">
+        <div className="bg-white pt-8 rounded-lg ">
           <h3 className="text-2xl font-semibold text-gray-900 mb-4">
             Payment Successful!
           </h3>

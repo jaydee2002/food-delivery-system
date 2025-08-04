@@ -1,17 +1,24 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/authContext";
-import { LogOut } from "lucide-react";
-import logo from "../assets/Logo.png";
+import { useCart } from "../contexts/cartContext";
+
+import { LogOut, ShoppingCart } from "lucide-react";
+import logo from "../assets/logo.png";
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false); // Renamed for clarity
-  const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false); // New state for mobile dropdown
+
+  const [isDesktopDropdownOpen, setIsDesktopDropdownOpen] = useState(false);
   const navigate = useNavigate();
   const { isAuthenticated, logout } = useAuth();
+  const dropdownTimeoutRef = useRef(null);
+
+  const { cart } = useCart();
+
+  const cartCount = cart?.items?.length || 0;
 
   // Handle scroll and Escape key
   useEffect(() => {
@@ -25,7 +32,6 @@ export default function Navbar() {
       if (e.key === "Escape") {
         setMenuOpen(false);
         setIsDesktopDropdownOpen(false);
-        setIsMobileDropdownOpen(false);
       }
     };
 
@@ -37,6 +43,25 @@ export default function Navbar() {
     };
   }, [lastScrollY]);
 
+  // Handle desktop dropdown hover
+  const handleMouseEnter = () => {
+    if (dropdownTimeoutRef.current) {
+      clearTimeout(dropdownTimeoutRef.current);
+    }
+    setIsDesktopDropdownOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    dropdownTimeoutRef.current = setTimeout(() => {
+      setIsDesktopDropdownOpen(false);
+    }, 100); // 100ms delay before closing
+  };
+
+  // Handle desktop dropdown click
+  const handleDropdownClick = () => {
+    setIsDesktopDropdownOpen((prev) => !prev);
+  };
+
   // Unified navigation handler
   const navigateAndClose = (path) => {
     if (path === "logout") {
@@ -46,7 +71,6 @@ export default function Navbar() {
     navigate(path);
     setMenuOpen(false);
     setIsDesktopDropdownOpen(false);
-    setIsMobileDropdownOpen(false);
   };
 
   // Menu item component
@@ -83,7 +107,7 @@ export default function Navbar() {
         e.preventDefault();
         navigateAndClose(path);
       }}
-      className="block py-2 px-3 rounded-lg text-base text-gray-800 hover:bg-gray-100" // Changed text-sm to text-base
+      className="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-base text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
     >
       {label}
     </a>
@@ -93,12 +117,11 @@ export default function Navbar() {
   const menuItems = [
     { path: "/about", label: "About" },
     { path: "/contact", label: "Contact" },
-    { path: "/support", label: "Support" },
     {
       label: "More",
       isDropdown: true,
       submenu: [
-        { label: "Add your restaurant", path: "/add-restaurent" },
+        { label: "Add your restaurant", path: "/add-restaurant" },
         { label: "Sign up to deliver", path: "/more/purchases" },
       ],
     },
@@ -182,26 +205,30 @@ export default function Navbar() {
         </button>
 
         {/* Desktop Menu */}
-
         <div className="hidden md:flex items-center space-x-6">
           {menuItems.map((item) =>
             item.isDropdown ? (
-              <div key={item.label} className="relative">
+              <div
+                key={item.label}
+                className="relative m-1"
+                onMouseEnter={handleMouseEnter}
+                onMouseLeave={handleMouseLeave}
+              >
                 <button
-                  onClick={() =>
-                    setIsDesktopDropdownOpen(!isDesktopDropdownOpen)
-                  }
-                  className="inline-flex items-center gap-x-2 text-base font-medium rounded-lg bg-white text-gray-800 focus:outline-none"
+                  onClick={handleDropdownClick}
+                  className="pr-4 inline-flex items-center gap-x-2 text-base font-medium bg-white text-gray-800 focus:outline-none"
                   aria-haspopup="menu"
                   aria-expanded={isDesktopDropdownOpen}
-                  aria-label="More options"
+                  aria-label="Dropdown"
                 >
                   {item.label}
                   <svg
-                    className={`w-4 h-4 ${
+                    className={`size-4 ${
                       isDesktopDropdownOpen ? "rotate-180" : ""
-                    }`}
+                    } transition-transform duration-200`}
                     xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -212,80 +239,65 @@ export default function Navbar() {
                     <path d="m6 9 6 6 6-6" />
                   </svg>
                 </button>
-                {isDesktopDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-60 bg-white border border-gray-200 rounded-lg z-50 sm:right-0 sm:w-48">
-                    {" "}
-                    {/* Changed left-0 to right-0 */}
-                    <div className="p-1 space-y-0.5">
-                      {item.submenu.map((subItem) => (
-                        <DropdownItem
-                          key={subItem.path}
-                          label={subItem.label}
-                          path={subItem.path}
-                        />
-                      ))}
-                    </div>
+                <div
+                  className={`transition-opacity duration-100 ${
+                    isDesktopDropdownOpen ? "opacity-100" : "opacity-0 hidden"
+                  } min-w-[12rem] bg-white border-2 border-gray-200 rounded-lg mt-3 z-[100] absolute right-0 before:h-4 before:absolute before:-top-4 before:left-0 before:w-full after:h-4 after:absolute after:-bottom-4 after:left-0 after:w-full`}
+                  role="menu"
+                  aria-orientation="vertical"
+                  aria-labelledby="dropdown"
+                >
+                  <div className="p-1 space-y-0.5">
+                    {item.submenu.map((subItem) => (
+                      <DropdownItem
+                        key={subItem.path}
+                        label={subItem.label}
+                        path={subItem.path}
+                      />
+                    ))}
                   </div>
-                )}
+                </div>
               </div>
             ) : (
               <MenuItem key={item.path} {...item} />
             )
           )}
+
+          <div
+            className="relative cursor-pointer"
+            onClick={() => navigate("/cart")}
+            title="Cart"
+          >
+            <ShoppingCart
+              className="text-gray-700 hover:text-black"
+              size={24}
+            />
+            {cartCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-1.5">
+                {cartCount}
+              </span>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
       <div
         className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          menuOpen ? " opacity-100" : "max-h-0 opacity-0"
+          menuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0"
         }`}
       >
         <div className="flex flex-col mt-4 space-y-4 px-4 pb-4">
-          {" "}
-          {/* Adjusted spacing */}
           {menuItems.map((item) =>
             item.isDropdown ? (
-              <div key={item.label}>
-                <button
-                  onClick={() => setIsMobileDropdownOpen(!isMobileDropdownOpen)}
-                  className="w-full py-3 px-4 inline-flex items-center justify-between gap-x-2 text-base font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none"
-                  aria-haspopup="menu"
-                  aria-expanded={isMobileDropdownOpen}
-                  aria-label="More options"
-                >
-                  {item.label}
-                  <svg
-                    className={`w-4 h-4 ${
-                      isMobileDropdownOpen ? "rotate-180" : ""
-                    }`}
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="m6 9 6 6 6-6" />
-                  </svg>
-                </button>
-                {isMobileDropdownOpen && (
-                  <div className="mt-2 w-full bg-white shadow-md rounded-lg">
-                    <div className="p-2 space-y-1">
-                      {" "}
-                      {/* Adjusted padding and spacing */}
-                      {item.submenu.map((subItem) => (
-                        <DropdownItem
-                          key={subItem.path}
-                          label={subItem.label}
-                          path={subItem.path}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+              item.submenu.map((subItem) => (
+                <MenuItem
+                  key={subItem.path}
+                  path={subItem.path}
+                  label={subItem.label}
+                  isMobile
+                />
+              ))
             ) : (
               <MenuItem key={item.path} {...item} isMobile />
             )

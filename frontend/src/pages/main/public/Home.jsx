@@ -1,5 +1,6 @@
 import { useAuth } from "../../../contexts/authContext";
 import { Link } from "react-router-dom";
+import InfiniteTicker from "../../../components/InfiniteTicker";
 
 const Home = () => {
   const { isAuthenticated, userRole } = useAuth();
@@ -12,6 +13,7 @@ const Home = () => {
       <p className="text-lg text-gray-600 mb-6 text-center max-w-md">
         Order delicious food from local restaurants, delivered fast.
       </p>
+      <InfiniteTicker />
 
       {isAuthenticated ? (
         userRole === "customer" ? (

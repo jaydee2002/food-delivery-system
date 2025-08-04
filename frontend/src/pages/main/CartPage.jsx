@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import {
   getCart,
   addToCart,
@@ -154,8 +155,6 @@ function CartPage() {
 
   return (
     <div className="max-w-6xl mx-auto bg-gray py-8">
-      <h2 className="text-3xl font-bold text-gray-900 mb-8">Your Cart</h2>
-
       {error && (
         <div className="bg-red-50 border-l-4 border-red-500 text-red-700 px-6 py-4 rounded-lg mb-8 ">
           {error}
@@ -219,7 +218,7 @@ function CartPage() {
                       <button
                         onClick={() => handleDecrement(item)}
                         disabled={isCartUpdating}
-                        className="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-700 rounded border border-gray-200 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 transition-colors duration-150"
+                        className="w-7 h-7 flex items-center justify-center bg-gray-100 text-gray-700 rounded border border-gray-200 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 transition-colors duration-150"
                         aria-label={`Decrease quantity of ${item.name}`}
                       >
                         <span className="text-lg">-</span>
@@ -230,7 +229,7 @@ function CartPage() {
                       <button
                         onClick={() => handleIncrement(item)}
                         disabled={isCartUpdating}
-                        className="w-8 h-8 flex items-center justify-center bg-gray-100 text-gray-700 rounded border border-gray-200 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 transition-colors duration-150"
+                        className="w-7 h-7 flex items-center justify-center bg-gray-100 text-gray-700 rounded border border-gray-200 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-300 transition-colors duration-150"
                         aria-label={`Increase quantity of ${item.name}`}
                       >
                         <span className="text-lg">+</span>
@@ -241,12 +240,12 @@ function CartPage() {
                         className="text-red-500 text-sm font-medium hover:text-red-600 disabled:text-red-300 transition-colors duration-150"
                         aria-label={`Remove ${item.name} from cart`}
                       >
-                        Remove
+                        <TrashIcon className="h-4 w-4" />
                       </button>
                     </div>
                   </div>
                   <p className="text-gray-900 font-semibold text-base">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    Rs. {(item.price * item.quantity).toFixed(2)}
                   </p>
                 </div>
               ))}
@@ -260,7 +259,7 @@ function CartPage() {
                   Clear Cart
                 </button>
                 <p className="text-xl font-bold text-gray-900">
-                  Total: ${total.toFixed(2)}
+                  Total: Rs. {total.toFixed(2)}
                 </p>
               </div>
             </div>
