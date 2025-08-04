@@ -69,6 +69,7 @@ function RestaurantPage() {
   }, [id]);
 
   const updateCartState = (response, item, quantity) => {
+    console.log("response" + response);
     const itemId = item._id;
     setCart({
       items: Array.isArray(response?.items) ? response.items : [],

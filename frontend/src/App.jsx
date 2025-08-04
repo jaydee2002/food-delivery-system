@@ -1,6 +1,7 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./contexts/authContext.jsx";
+import { CartProvider } from "./contexts/cartContext.jsx";
 import RoleProtectedRoute from "./routes/RoleProtectedRoute.jsx";
 import RedirectByRole from "./routes/RedirectByRole.jsx";
 
@@ -42,92 +43,94 @@ import Table from "./components/temp/Table.jsx";
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          {/* Auth layout routes */}
-          <Route element={<AuthLayout />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Route>
+      <CartProvider>
+        <Router>
+          <Routes>
+            {/* Auth layout routes */}
+            <Route element={<AuthLayout />}>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </Route>
 
-          {/* Main layout routes */}
-          <Route element={<MainLayout />}>
-            <Route index element={<Home />} />
-            <Route path="/" element={<Home />} />
-            <Route
-              element={
-                <RoleProtectedRoute
-                  allowedRoles={[
-                    "customer",
-                    "system_admin",
-                    "restaurant_admin",
-                  ]}
+            {/* Main layout routes */}
+            <Route element={<MainLayout />}>
+              <Route index element={<Home />} />
+              <Route path="/" element={<Home />} />
+              <Route
+                element={
+                  <RoleProtectedRoute
+                    allowedRoles={[
+                      "customer",
+                      "system_admin",
+                      "restaurant_admin",
+                    ]}
+                  />
+                }
+              >
+                <Route path="/restaurants" element={<Restaurants />} />
+                <Route path="/add-restaurent" element={<AddRestaurant />} />
+                <Route path="/restaurant/:id" element={<RestaurantPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/payment" element={<PaymentPage />} />
+                <Route path="/:orderId" element={<TrackOrder />} />
+                <Route path="/profile" element={<UserProfile />} />;
+              </Route>
+            </Route>
+
+            <Route element={<SystemAdminDashboardLayout />}>
+              <Route
+                element={<RoleProtectedRoute allowedRoles={["system_admin"]} />}
+              >
+                <Route path="/system-admin" element={<SystemAdminPage />} />
+                <Route
+                  path="/restaurant-approval"
+                  element={<RestaurantApproval />}
                 />
-              }
-            >
-              <Route path="/restaurants" element={<Restaurants />} />
-              <Route path="/add-restaurent" element={<AddRestaurant />} />
-              <Route path="/restaurant/:id" element={<RestaurantPage />} />
-              <Route path="/cart" element={<CartPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/payment" element={<PaymentPage />} />
-              <Route path="/:orderId" element={<TrackOrder />} />
-              <Route path="/profile" element={<UserProfile />} />;
+                <Route
+                  path="/manage-restaurents"
+                  element={<ManageRestaurants />}
+                />
+              </Route>
             </Route>
-          </Route>
 
-          <Route element={<SystemAdminDashboardLayout />}>
-            <Route
-              element={<RoleProtectedRoute allowedRoles={["system_admin"]} />}
-            >
-              <Route path="/system-admin" element={<SystemAdminPage />} />
+            <Route element={<RestaurantAdminDashboardLayout />}>
               <Route
-                path="/restaurant-approval"
-                element={<RestaurantApproval />}
-              />
+                element={
+                  <RoleProtectedRoute allowedRoles={["restaurant_admin"]} />
+                }
+              >
+                <Route path="/menu-management" element={<MenuManagement />} />
+                <Route
+                  path="/restaurant-admin"
+                  element={<RestaurantAdminWrapper />}
+                />
+              </Route>
+            </Route>
+
+            <Route element={<DeliveryPersonalDashboardLayout />}>
               <Route
-                path="/manage-restaurents"
-                element={<ManageRestaurants />}
-              />
+                element={
+                  <RoleProtectedRoute allowedRoles={["delivery_personnel"]} />
+                }
+              >
+                <Route path="/ready-deliveries" element={<ReadyDeliveries />} />
+                <Route path="/:deliveryId" element={<DeliveryDetails />} />
+                <Route path="/deliveries" element={<MyDeliveries />} />
+              </Route>
             </Route>
-          </Route>
 
-          <Route element={<RestaurantAdminDashboardLayout />}>
-            <Route
-              element={
-                <RoleProtectedRoute allowedRoles={["restaurant_admin"]} />
-              }
-            >
-              <Route path="/menu-management" element={<MenuManagement />} />
-              <Route
-                path="/restaurant-admin"
-                element={<RestaurantAdminWrapper />}
-              />
-            </Route>
-          </Route>
+            {/* Role-based redirection */}
+            <Route path="/dashboard" element={<RedirectByRole />} />
 
-          <Route element={<DeliveryPersonalDashboardLayout />}>
-            <Route
-              element={
-                <RoleProtectedRoute allowedRoles={["delivery_personnel"]} />
-              }
-            >
-              <Route path="/ready-deliveries" element={<ReadyDeliveries />} />
-              <Route path="/:deliveryId" element={<DeliveryDetails />} />
-              <Route path="/deliveries" element={<MyDeliveries />} />
-            </Route>
-          </Route>
-
-          {/* Role-based redirection */}
-          <Route path="/dashboard" element={<RedirectByRole />} />
-
-          {/* Catch all */}
-          <Route path="/unauthorized" element={<Unauthorized />} />
-          <Route path="*" element={<PageNotFound />} />
-          <Route path="/address-picker" element={<AddressPicker />} />
-          <Route path="/table" element={<Table darkMode={true} />} />
-        </Routes>
-      </Router>
+            {/* Catch all */}
+            <Route path="/unauthorized" element={<Unauthorized />} />
+            <Route path="*" element={<PageNotFound />} />
+            <Route path="/address-picker" element={<AddressPicker />} />
+            <Route path="/table" element={<Table darkMode={true} />} />
+          </Routes>
+        </Router>
+      </CartProvider>
     </AuthProvider>
   );
 }
