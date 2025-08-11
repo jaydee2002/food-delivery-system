@@ -74,7 +74,7 @@ function App() {
                 <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/payment" element={<PaymentPage />} />
                 <Route path="/:orderId" element={<TrackOrder />} />
-                <Route path="/profile" element={<UserProfile />} />;
+                <Route path="/profile" element={<UserProfile />} />
               </Route>
             </Route>
 
