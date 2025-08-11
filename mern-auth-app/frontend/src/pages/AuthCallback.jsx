@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 
 const AuthCallback = () => {
-  const { setToken, setUser } = useContext(AuthContext);
+  const { setToken } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
