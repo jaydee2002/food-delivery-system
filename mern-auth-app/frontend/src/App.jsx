@@ -8,6 +8,7 @@ import AdminPanel from "./pages/AdminPanel";
 import { useContext } from "react";
 import AuthContext from "./context/AuthContext";
 import AuthCallback from "./pages/AuthCallback";
+import AuthLayout from "./layouts/AuthLayout";
 
 const ProtectedRoute = ({ children, requiredRole }) => {
   const { token, user } = useContext(AuthContext);
@@ -26,9 +27,12 @@ const App = () => {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/verify-otp" element={<OTPVerification />} />
+          <Route element={<AuthLayout />}>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/verify-otp" element={<OTPVerification />} />
+          </Route>
+
           <Route path="/auth/callback" element={<AuthCallback />} />
           <Route
             path="/dashboard"
