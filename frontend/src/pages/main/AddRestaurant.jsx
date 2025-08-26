@@ -130,6 +130,14 @@ export default function AddRestaurant() {
           {submitError}
         </div>
       )}
+      {/* Title + description */}
+      <div className="text mb-6">
+        <h1 className="text-2xl font-bold text-gray-900">Add Restaurant</h1>
+        <p className="text-gray-600 mt-2 text-base">
+          Fill in the details below to register your restaurant. Make sure the
+          information is accurate so customers can easily find you.
+        </p>
+      </div>
 
       <form onSubmit={handleSubmit} className="space-y-6 w-full">
         <div>

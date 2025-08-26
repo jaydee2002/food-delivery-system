@@ -7,45 +7,56 @@ import {
   deleteMenuItem,
 } from "../../services/menuService";
 
-// Sub-component for Menu Item Card
+/* ----------------------------- Menu Item Card ----------------------------- */
 const MenuItemCard = ({ item, onEdit, onDelete }) => (
-  <div className="bg-white p-4 rounded-lg ">
+  <div className="group rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
     {item.image ? (
       <img
         src={`${import.meta.env.VITE_API_RESTAURANT_BASE_URL}${item.image}`}
         alt={item.name}
-        className="w-full h-48 object-cover rounded-md mb-4"
+        className="mb-4 h-48 w-full rounded-xl object-cover transition group-hover:scale-[1.01]"
         loading="lazy"
         onError={(e) => {
-          e.target.src = "https://via.placeholder.com/150?text=No+Image";
+          e.target.src = "https://via.placeholder.com/640x360?text=No+Image";
         }}
       />
     ) : (
-      <div className="w-full h-48 bg-gray-200 rounded-md mb-4 flex items-center justify-center">
-        <span className="text-gray-500">No Image</span>
+      <div className="mb-4 flex h-48 w-full items-center justify-center rounded-xl bg-neutral-100 text-neutral-500">
+        No Image
       </div>
     )}
-    <h3 className="text-lg font-semibold">{item.name}</h3>
-    <p className="text-gray-600">${item.price.toFixed(2)}</p>
-    <p className="text-gray-500 capitalize">{item.category}</p>
-    <p className="text-gray-500 truncate">{item.description}</p>
-    <p className="text-sm font-medium text-gray-500 mb-4">
+
+    <h3 className="text-base font-semibold text-neutral-900">{item.name}</h3>
+    <p className="text-sm font-semibold text-neutral-900">
+      ${item.price.toFixed(2)}
+    </p>
+    <p className="capitalize text-sm text-neutral-600">{item.category}</p>
+    <p className="line-clamp-2 text-sm text-neutral-600">{item.description}</p>
+
+    <p className="mb-4 mt-1 text-xs font-medium text-neutral-500">
       Status:{" "}
-      <span className={item.isAvailable ? "text-green-600" : "text-red-600"}>
+      <span
+        className={
+          item.isAvailable
+            ? "rounded-full bg-green-50 px-2 py-0.5 text-green-700 ring-1 ring-green-200"
+            : "rounded-full bg-red-50 px-2 py-0.5 text-red-700 ring-1 ring-red-200"
+        }
+      >
         {item.isAvailable ? "Available" : "Unavailable"}
       </span>
     </p>
-    <div className="mt-4 flex justify-end space-x-2">
+
+    <div className="mt-4 flex justify-end gap-2">
       <button
         onClick={() => onEdit(item)}
-        className="px-3 py-1 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+        className="inline-flex items-center justify-center rounded-full border border-amber-300 bg-amber-500 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-500/40"
         aria-label={`Edit ${item.name}`}
       >
         Edit
       </button>
       <button
         onClick={() => onDelete(item._id)}
-        className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+        className="inline-flex items-center justify-center rounded-full bg-red-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500/40"
         aria-label={`Delete ${item.name}`}
       >
         Delete
@@ -69,7 +80,7 @@ MenuItemCard.propTypes = {
   baseUrl: PropTypes.string.isRequired,
 };
 
-// Sub-component for Menu Form
+/* ---------------------------------- Form --------------------------------- */
 const MenuForm = ({
   formData,
   onInputChange,
@@ -86,22 +97,26 @@ const MenuForm = ({
   }, [imageFile]);
 
   return (
-    <div className="mb-10 max-w-full mx-auto">
-      <h2 className="text-xl font-semibold mb-4">
+    <div className="mx-auto mb-10 max-w-full">
+      <h2 className="mb-2 text-lg font-semibold text-neutral-900">
         {editingId ? "Edit Menu Item" : "Add New Menu Item"}
       </h2>
+      <p className="mb-4 text-sm text-neutral-600">
+        Upload an image, set pricing and availability.
+      </p>
+
       <form
         onSubmit={onSubmit}
-        className="bg-white p-8 rounded  border border-gray-100"
+        className="rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm"
         noValidate
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Name and Price Section */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-xs font-semibold text-neutral-700"
               >
                 Name
               </label>
@@ -111,41 +126,27 @@ const MenuForm = ({
                 name="name"
                 value={formData.name}
                 onChange={onInputChange}
-                className={`w-full px-4 py-3 rounded-lg border ${
-                  errors.name ? "border-red-500" : "border-gray-300"
-                } bg-gray-50 text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200`}
+                className={`w-full rounded-xl border px-4 py-3 text-[15px] outline-none transition focus:ring-2 focus:ring-neutral-900/20 ${
+                  errors.name
+                    ? "border-red-400 focus:border-red-500"
+                    : "border-neutral-300 focus:border-neutral-900"
+                }`}
                 placeholder="Enter item name"
                 required
                 aria-invalid={!!errors.name}
                 aria-describedby={errors.name ? "name-error" : undefined}
               />
               {errors.name && (
-                <p
-                  id="name-error"
-                  className="mt-1 text-sm text-red-500 flex items-center"
-                >
-                  <svg
-                    className="w-4 h-4 mr-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+                <p id="name-error" className="mt-1 text-xs text-red-600">
                   {errors.name}
                 </p>
               )}
             </div>
+
             <div>
               <label
                 htmlFor="price"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-xs font-semibold text-neutral-700"
               >
                 Price
               </label>
@@ -155,9 +156,11 @@ const MenuForm = ({
                 name="price"
                 value={formData.price}
                 onChange={onInputChange}
-                className={`w-full px-4 py-3 rounded-lg border ${
-                  errors.price ? "border-red-500" : "border-gray-300"
-                } bg-gray-50 text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200`}
+                className={`w-full rounded-xl border px-4 py-3 text-[15px] outline-none transition focus:ring-2 focus:ring-neutral-900/20 ${
+                  errors.price
+                    ? "border-red-400 focus:border-red-500"
+                    : "border-neutral-300 focus:border-neutral-900"
+                }`}
                 placeholder="Enter price"
                 required
                 min="0"
@@ -166,24 +169,7 @@ const MenuForm = ({
                 aria-describedby={errors.price ? "price-error" : undefined}
               />
               {errors.price && (
-                <p
-                  id="price-error"
-                  className="mt-1 text-sm text-red-500 flex items-center"
-                >
-                  <svg
-                    className="w-4 h-4 mr-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+                <p id="price-error" className="mt-1 text-xs text-red-600">
                   {errors.price}
                 </p>
               )}
@@ -191,11 +177,11 @@ const MenuForm = ({
           </div>
 
           {/* Category and Image Section */}
-          <div className="space-y-6">
+          <div className="space-y-5">
             <div>
               <label
                 htmlFor="category"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-xs font-semibold text-neutral-700"
               >
                 Category
               </label>
@@ -204,7 +190,7 @@ const MenuForm = ({
                 name="category"
                 value={formData.category}
                 onChange={onInputChange}
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                className="w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-[15px] outline-none transition focus:border-neutral-900 focus:ring-2 focus:ring-neutral-900/20"
               >
                 <option value="appetizer">Appetizer</option>
                 <option value="main">Main Course</option>
@@ -213,10 +199,11 @@ const MenuForm = ({
                 <option value="side">Side</option>
               </select>
             </div>
+
             <div>
               <label
                 htmlFor="image"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="mb-1 block text-xs font-semibold text-neutral-700"
               >
                 Image
               </label>
@@ -225,38 +212,21 @@ const MenuForm = ({
                 type="file"
                 onChange={onImageChange}
                 accept="image/jpeg,image/jpg,image/png,image/gif"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors duration-200"
+                className="block w-full cursor-pointer rounded-xl border border-neutral-300 bg-white px-4 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-neutral-900 file:px-3 file:py-1.5 file:text-sm file:font-medium file:text-white hover:file:opacity-90 focus:outline-none focus:ring-2 focus:ring-neutral-900/20"
                 ref={fileInputRef}
                 aria-describedby={errors.image ? "image-error" : undefined}
               />
               {errors.image && (
-                <p
-                  id="image-error"
-                  className="mt-1 text-sm text-red-500 flex items-center"
-                >
-                  <svg
-                    className="w-4 h-4 mr-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
+                <p id="image-error" className="mt-1 text-xs text-red-600">
                   {errors.image}
                 </p>
               )}
               {imagePreview && (
-                <div className="mt-4">
+                <div className="mt-3">
                   <img
                     src={imagePreview}
                     alt="Preview"
-                    className="w-40 h-40 object-cover rounded-lg border border-gray-200 shadow-sm"
+                    className="h-40 w-40 rounded-xl border border-neutral-200 object-cover shadow-sm"
                   />
                 </div>
               )}
@@ -267,7 +237,7 @@ const MenuForm = ({
           <div className="lg:col-span-2">
             <label
               htmlFor="description"
-              className="block text-sm font-medium text-gray-700 mb-1"
+              className="mb-1 block text-xs font-semibold text-neutral-700"
             >
               Description
             </label>
@@ -276,7 +246,7 @@ const MenuForm = ({
               name="description"
               value={formData.description}
               onChange={onInputChange}
-              className="w-full px-4 py-3 rounded-lg border border-gray-300 bg-gray-50 text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+              className="w-full rounded-xl border border-neutral-300 bg-white px-4 py-3 text-[15px] outline-none transition focus:border-neutral-900 focus:ring-2 focus:ring-neutral-900/20"
               placeholder="Enter item description"
               rows="5"
             />
@@ -284,15 +254,15 @@ const MenuForm = ({
 
           {/* Availability Section */}
           <div className="lg:col-span-2">
-            <label className="flex items-center">
+            <label className="inline-flex items-center gap-2">
               <input
                 type="checkbox"
                 name="isAvailable"
                 checked={formData.isAvailable}
                 onChange={onInputChange}
-                className="h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 transition-colors duration-200"
+                className="h-4 w-4 accent-neutral-900"
               />
-              <span className="ml-2 text-sm font-medium text-gray-700">
+              <span className="text-sm font-medium text-neutral-800">
                 Available
               </span>
             </label>
@@ -300,19 +270,19 @@ const MenuForm = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-8 flex justify-end space-x-3">
+        <div className="mt-6 flex justify-end gap-2">
           {editingId && (
             <button
               type="button"
               onClick={onCancel}
-              className="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-300 transition-colors duration-200"
+              className="inline-flex items-center justify-center rounded-full border border-neutral-300 px-5 py-2.5 text-sm font-medium text-neutral-800 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-900/20"
             >
               Cancel
             </button>
           )}
           <button
             type="submit"
-            className="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
+            className="inline-flex items-center justify-center rounded-full bg-neutral-900 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-neutral-900/20"
           >
             {editingId ? "Update Item" : "Add Item"}
           </button>
@@ -340,28 +310,31 @@ MenuForm.propTypes = {
   errors: PropTypes.object.isRequired,
 };
 
-// Sub-component for Delete Confirmation Modal
+/* -------------------------- Delete Confirmation -------------------------- */
 const DeleteModal = ({ isOpen, onClose, onConfirm, itemName }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-        <h2 className="text-lg font-semibold mb-4">Confirm Deletion</h2>
-        <p className="text-gray-600 mb-6">
-          Are you sure you want to delete "{itemName}"? This action cannot be
-          undone.
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+      <div className="w-full max-w-md rounded-2xl border border-neutral-200 bg-white p-6 shadow-xl">
+        <h2 className="text-base font-semibold text-neutral-900">
+          Confirm Deletion
+        </h2>
+        <p className="mt-2 text-sm text-neutral-600">
+          Are you sure you want to delete "
+          <span className="font-medium">{itemName}</span>"? This action cannot
+          be undone.
         </p>
-        <div className="flex justify-end space-x-2">
+        <div className="mt-5 flex justify-end gap-2">
           <button
             onClick={onClose}
-            className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300"
+            className="inline-flex items-center justify-center rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium text-neutral-800 hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-900/20"
           >
             Cancel
           </button>
           <button
             onClick={onConfirm}
-            className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500"
+            className="inline-flex items-center justify-center rounded-full bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600/30"
           >
             Delete
           </button>
@@ -378,6 +351,7 @@ DeleteModal.propTypes = {
   itemName: PropTypes.string.isRequired,
 };
 
+/* ------------------------------- Main Page -------------------------------- */
 const MenuManagement = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [formData, setFormData] = useState({
@@ -554,24 +528,26 @@ const MenuManagement = () => {
   }, [menuItems, searchQuery, sortBy]);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Menu Management</h1>
+    <div className="mx-auto max-w-6xl px-4 py-8">
+      <h1 className="mb-4 text-2xl font-bold tracking-tight text-neutral-900">
+        Menu Management
+      </h1>
 
       {errors.fetch || errors.submit || errors.delete ? (
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+        <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
           {errors.fetch || errors.submit || errors.delete}
         </div>
       ) : null}
 
       {success && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+        <div className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-800">
           {success}
         </div>
       )}
 
       {isLoading && (
-        <div className="fixed inset-0 bg-black bg-opacity-25 flex items-center justify-center z-50">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        <div className="fixed inset-0 z-50 grid place-items-center bg-white/50 backdrop-blur-sm">
+          <div className="h-10 w-10 animate-spin rounded-full border-2 border-neutral-900 border-t-transparent" />
         </div>
       )}
 
@@ -588,30 +564,35 @@ const MenuManagement = () => {
       />
 
       <div>
-        <h2 className="text-xl font-semibold mb-4">Menu Items</h2>
+        <h2 className="mb-4 text-lg font-semibold text-neutral-900">
+          Menu Items
+        </h2>
 
-        <div className="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="mb-4 flex flex-col items-stretch justify-between gap-3 sm:flex-row">
           <input
             type="text"
             placeholder="Search menu items..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full rounded-xl border border-neutral-300 bg-white px-4 py-2.5 text-sm outline-none transition focus:border-neutral-900 focus:ring-2 focus:ring-neutral-900/20 sm:max-w-xs"
           />
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="rounded-xl border border-neutral-300 bg-white px-3 py-2 text-sm outline-none transition focus:border-neutral-900 focus:ring-2 focus:ring-neutral-900/20"
           >
             <option value="name">Sort by Name</option>
             <option value="price">Sort by Price</option>
             <option value="category">Sort by Category</option>
           </select>
         </div>
+
         {filteredAndSortedItems.length === 0 ? (
-          <p className="text-gray-500">No menu items found.</p>
+          <p className="rounded-2xl border border-neutral-200 bg-white p-10 text-center text-neutral-600 shadow-sm">
+            No menu items found.
+          </p>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredAndSortedItems.map((item) => (
               <MenuItemCard
                 key={item._id}
