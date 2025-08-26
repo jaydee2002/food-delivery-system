@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getRestaurants } from "../../services/restaurentServices";
-import { AlertCircle, PlusCircle } from "lucide-react";
+import { AlertCircle, PlusCircle, Building2 } from "lucide-react";
 
 function Restaurants() {
   const [restaurants, setRestaurants] = useState([]);
@@ -13,10 +13,10 @@ function Restaurants() {
       setIsLoading(true);
       try {
         const data = await getRestaurants();
-        setRestaurants(data.data || []);
+        setRestaurants(data?.data || []);
       } catch (err) {
         setError(
-          err.response?.data?.error ||
+          err?.response?.data?.error ||
             "Unable to load restaurants. Please try again."
         );
       } finally {
@@ -26,131 +26,139 @@ function Restaurants() {
     fetchRestaurants();
   }, []);
 
+  const baseUrl = import.meta.env.VITE_API_RESTAURANT_BASE_URL || "";
+
   return (
-    <div className="max-w-6xl mx-auto py-8">
+    <div className="max-w-6xl mx-auto py-8 px-4">
+      {/* Header */}
+      <div className="flex items-end justify-between gap-3">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-neutral-900">
+            Restaurants
+          </h1>
+          <p className="text-sm text-neutral-600">
+            Browse and manage partner locations.
+          </p>
+        </div>
+        <Link
+          to="/add-restaurant"
+          className="inline-flex items-center gap-2 rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-neutral-900/20"
+        >
+          <PlusCircle className="h-4 w-4" />
+          Add Restaurant
+        </Link>
+      </div>
+
+      {/* Error alert */}
       {error && (
         <div
-          className="bg-red-100 border-l-4 border-red-600 p-4 rounded-lg shadow-md mb-8 flex items-center gap-3 animate-toast-in"
+          className="mt-4 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-800"
           role="alert"
           aria-live="assertive"
         >
-          <AlertCircle size={20} className="text-red-600" />
-          <p className="text-red-800 text-sm">{error}</p>
+          <AlertCircle className="mt-0.5 h-5 w-5 shrink-0" />
+          <div className="text-sm">{error}</div>
         </div>
       )}
+
+      {/* Loading skeletons */}
       {isLoading ? (
         <div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6"
+          className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
           aria-busy="true"
           aria-label="Loading restaurants"
           role="status"
-          aria-hidden="true"
         >
-          {[...Array(8)].map((_, index) => (
+          {Array.from({ length: 8 }).map((_, i) => (
             <div
-              key={index}
-              className="bg-white border border-gray-100 p-4 rounded-lg shadow-sm"
+              key={i}
+              className="rounded-xl border border-neutral-200 bg-white p-3 shadow-sm"
             >
-              <div className="h-56 w-full bg-gray-200 rounded-md mb-4 animate-pulse"></div>
-              <div className="space-y-2">
-                <div className="h-6 bg-gray-200 rounded w-full animate-pulse"></div>
-                <div className="h-4 bg-gray-200 rounded w-3/5 animate-pulse"></div>
-                <div className="h-4 bg-gray-200 rounded w-4/5 animate-pulse"></div>
-                <div className="h-4 bg-gray-200 rounded w-4/5 animate-pulse"></div>
+              <div className="aspect-[16/9] w-full rounded-lg bg-neutral-200 animate-pulse" />
+              <div className="mt-3 space-y-2">
+                <div className="h-5 w-3/4 rounded bg-neutral-200 animate-pulse" />
+                <div className="h-4 w-1/2 rounded bg-neutral-200 animate-pulse" />
+                <div className="h-4 w-2/3 rounded bg-neutral-200 animate-pulse" />
               </div>
             </div>
           ))}
         </div>
       ) : restaurants.length === 0 ? (
-        <div className="bg-white border border-gray-100 rounded-lg p-6 shadow-sm text-center mt-6 animate-fade-in">
-          <p className="text-gray-600 text-sm mb-4">
-            No restaurants found. Start by adding a new one!
+        // Empty state
+        <div className="mt-6 rounded-2xl border border-neutral-200 bg-white p-8 text-center shadow-sm">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-neutral-100">
+            <Building2 className="h-6 w-6 text-neutral-500" />
+          </div>
+          <h2 className="mt-3 text-base font-semibold text-neutral-900">
+            No restaurants yet
+          </h2>
+          <p className="mt-1 text-sm text-neutral-600">
+            Get started by adding your first restaurant.
           </p>
           <Link
             to="/add-restaurant"
-            className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200"
+            className="mt-4 inline-flex items-center gap-2 rounded-full border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-100 focus:outline-none focus:ring-2 focus:ring-neutral-900/20"
             aria-label="Add a new restaurant"
           >
-            <PlusCircle size={16} className="mr-2" />
+            <PlusCircle className="h-4 w-4" />
             Add Restaurant
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
-          {restaurants.map((restaurant) => (
-            <Link
-              key={restaurant._id}
-              to={`/restaurant/${restaurant._id}`}
-              className="bg-white border border-gray-100  rounded-lg shadow-sm transition-all duration-200"
-              aria-label={`Visit ${restaurant.storeName}`}
-            >
-              <img
-                src={
-                  restaurant.image
-                    ? `${import.meta.env.VITE_API_RESTAURANT_BASE_URL}${
-                        restaurant.image
-                      }`
-                    : "https://via.placeholder.com/300x224?text=No+Image"
-                }
-                alt={restaurant.storeName}
-                className="w-full h-28  rounded-t-md "
-                loading="lazy"
-                onError={(e) => {
-                  e.target.src =
-                    "https://via.placeholder.com/300x224?text=No+Image";
-                }}
-              />
-              <div className="space-y-1 p-2">
-                <h3 className="text-lg font-semibold text-gray-900 truncate">
-                  {restaurant.storeName}
-                </h3>
-                <p className="text-sm font-medium text-gray-600 truncate">
-                  {restaurant.brandName}
-                </p>
-                <p className="text-sm text-gray-500 capitalize truncate">
-                  {restaurant.businessType}
-                </p>
-                <p className="text-sm text-gray-500 truncate">
-                  {restaurant.city}, {restaurant.state}
-                </p>
-              </div>
-            </Link>
-          ))}
+        // Grid
+        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {restaurants.map((r) => {
+            const imgSrc = r?.image ? `${baseUrl}${r.image}` : "";
+            return (
+              <Link
+                key={r._id}
+                to={`/restaurant/${r._id}`}
+                className="group block rounded-xl border border-neutral-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-neutral-900/20"
+                aria-label={`Visit ${r?.storeName || "restaurant"}`}
+              >
+                {/* Image with proper ratio */}
+                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-xl">
+                  {imgSrc ? (
+                    <img
+                      src={imgSrc}
+                      alt={r.storeName}
+                      className="h-full w-full object-cover transition group-hover:scale-[1.02]"
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.src =
+                          "https://via.placeholder.com/640x360?text=No+Image";
+                      }}
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center bg-neutral-100">
+                      <span className="text-xs text-neutral-500">No image</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Content */}
+                <div className="p-3">
+                  <h3 className="truncate text-base font-semibold text-neutral-900">
+                    {r.storeName}
+                  </h3>
+                  <p className="truncate text-sm text-neutral-600">
+                    {r.brandName}
+                  </p>
+
+                  <div className="mt-2 text-xs text-neutral-500">
+                    <span className="capitalize">{r.businessType}</span>
+                    <span className="mx-1">•</span>
+                    <span>
+                      {r.city}
+                      {r.state ? `, ${r.state}` : ""}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
-
-      {/* Custom Animations */}
-      <style>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes toast-in {
-          from {
-            transform: translateX(100%);
-            opacity: 0;
-          }
-          to {
-            transform: translateX(0);
-            opacity: 1;
-          }
-        }
-        .animate-fade-in {
-          animation: fade-in 0.3s ease-out;
-        }
-        .animate-toast-in {
-          animation: toast-in 0.3s ease-out;
-        }
-        .font-sans {
-          font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        }
-      `}</style>
     </div>
   );
 }
